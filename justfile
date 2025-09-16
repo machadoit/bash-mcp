@@ -1,9 +1,11 @@
+docker_image := "bash-mcp"
+
 # Build the Docker image
 build:
-    docker build -t mcp-template .
+    docker build -t {{docker_image}} .
 
 # Test with MCP Inspector
-test: build
+inspect *args: build
     npx @modelcontextprotocol/inspector docker run -i --rm \
         --network none \
         --user $(id -u):$(id -g) \
@@ -11,10 +13,13 @@ test: build
         --tmpfs /tmp \
         --cap-drop ALL \
         --security-opt no-new-privileges \
-        mcp-template
+        --name "{{docker_image}}-inspector" \
+        -v "{{justfile_directory()}}/test-mcp-sandbox":/workdir/test-mcp-sandbox:ro \
+        {{args}} \
+        {{docker_image}}
 
 # Interactive shell for development/debugging
-dev: build
+dev *args: build
     docker run -it --rm \
         --network none \
         --user $(id -u):$(id -g) \
@@ -23,7 +28,9 @@ dev: build
         --cap-drop ALL \
         --security-opt no-new-privileges \
         --entrypoint /bin/sh \
-        mcp-template
+        -v "{{justfile_directory()}}/test-mcp-sandbox":/workdir/test-mcp-sandbox:ro \
+        {{args}} \
+        {{docker_image}}
 
 # Run the actual MCP server (configration that you could use in the mcp settings of an agent)
 serve: build
@@ -34,4 +41,4 @@ serve: build
         --tmpfs /tmp \
         --cap-drop ALL \
         --security-opt no-new-privileges \
-        mcp-template
+        {{docker_image}}
