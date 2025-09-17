@@ -3,7 +3,7 @@ FROM python:3.12-slim
 # Install dependencies and clean up in single layer
 RUN apt-get update && \
     apt-get install -y --no-install-recommends ripgrep && \
-    pip install --no-cache-dir fastmcp && \
+    pip install --no-cache-dir fastmcp markitdown[pdf] && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Create app directory for MCP server code

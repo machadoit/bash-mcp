@@ -15,6 +15,8 @@ inspect *args: build
         --security-opt no-new-privileges \
         --name "{{docker_image}}-inspector" \
         -v "{{justfile_directory()}}/test-mcp-sandbox":/workdir/test-mcp-sandbox:ro \
+        -v "{{justfile_directory()}}/docs-pdf":/workdir/docs-pdf:ro \
+        -v "{{justfile_directory()}}/docs-markdown":/workdir/docs-markdown:rw \
         {{args}} \
         {{docker_image}}
 
@@ -29,6 +31,8 @@ dev *args: build
         --security-opt no-new-privileges \
         --entrypoint /bin/sh \
         -v "{{justfile_directory()}}/test-mcp-sandbox":/workdir/test-mcp-sandbox:ro \
+        -v "{{justfile_directory()}}/docs-pdf":/workdir/docs-pdf:ro \
+        -v "{{justfile_directory()}}/docs-markdown":/workdir/docs-markdown:rw \
         {{args}} \
         {{docker_image}}
 
