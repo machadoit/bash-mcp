@@ -44,4 +44,4 @@ async def convert_pdf_to_markdown(
     return f"Converted {pdf_path} to {md_path}"
 
 if __name__ == "__main__":
-    mcp.run()
+    mcp.run(transport="sse", host="0.0.0.0", port=8000)
